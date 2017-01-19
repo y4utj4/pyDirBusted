@@ -79,7 +79,7 @@ def url_checker(url):
 			print ('It appears your site isn\'t valid. Please verify your input and run again.')
 			return False
 
-# 	trying to convert to aiohttp, not working. returns generator object
+ #	trying to convert to aiohttp, not working. returns generator object
 #	parsed_url = urlparse(url)	
 #	if not parsed_url.scheme == None:
 #		secure_url = 'https://' + url
@@ -110,8 +110,7 @@ def main():
 	if args.outfile:
 		outfile = open(args.outfile, 'w')
 	url = args.url
-	
-	valid_url = str(url_checker(url))
+	valid_url = url_checker(url)
 	verbose = args.verbose
 	directories = open(args.wordlist, 'r')
 
@@ -122,11 +121,10 @@ def main():
 	loop = asyncio.get_event_loop()
 	loop.add_signal_handler(signal.SIGINT, signal_handler)
 
-	# Do the things
-	print ('Checking base url: ',valid_url)
+	#Do the things
+	print ('[->] Checking base url: ',valid_url)
 	f = asyncio.wait([get_status(valid_url + directory.rstrip('\n'), verbose, outfile, sem) for directory in directories])
 	try:
-		url = url_checker(url)
 		loop.run_until_complete(f)
 	except asyncio.CancelledError:
 		print('Tasks were canceled')
