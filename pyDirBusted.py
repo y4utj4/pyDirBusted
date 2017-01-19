@@ -3,7 +3,7 @@
 *** pyDirBusted ***
 
 Author: Jeremy Schoeneman (y4utj4)
-Thanks to: Coldfusion39 for the help!!
+Thanks to: Coldfusion39 and zero_steiner for the help!!
  
 pyDirBuster is a python version of DirBuster which brute-forces and enumerates directories within a website. 
 You'll need your own directory wordlist. 
@@ -62,7 +62,9 @@ def signal_handler():
 		task.cancel()
 
 def url_checker(url):
-	# need to convert to aiohttp
+	# Checks to see if your site is valid first. If not, attempts to add the appropriate
+	# scheme (https, then http) and if still fails, shows site error. 
+	# Using urlparser/urllib.request to check for valid url. 
 	parsed_url = urlparse(url)	
 	if not parsed_url.scheme == None:
 		secure_url = "https://" + url
@@ -74,8 +76,25 @@ def url_checker(url):
 			urllib.request.urlopen(url)
 			return url
 		else:
-			print ('Done. It appears your site isn\'t valid. Please verify your input.')
+			print ('It appears your site isn\'t valid. Please verify your input and run again.')
 			return False
+
+# 	trying to convert to aiohttp, not working. returns generator object
+#	parsed_url = urlparse(url)	
+#	if not parsed_url.scheme == None:
+#		secure_url = 'https://' + url
+#		response = yield from aiohttp.request('GET', secure_url)
+#		if resp.status == 200:
+#			return secure_url
+#		else:
+#			unsecure_url = 'http://' + url
+#			response = yield from aiohttp.request('GET', unsecure_url)
+#			if response.status == 200:
+#				return unsecure_url
+#			else:
+#				print ('[-] It appears your site (' + url + ') isn\'t valid. Please verify your input and run again.')
+#	else:
+#		return url
 
 def main():
 	# setup arguments
@@ -91,7 +110,8 @@ def main():
 	if args.outfile:
 		outfile = open(args.outfile, 'w')
 	url = args.url
-	valid_url = url_checker(url)
+	
+	valid_url = str(url_checker(url))
 	verbose = args.verbose
 	directories = open(args.wordlist, 'r')
 
@@ -103,7 +123,7 @@ def main():
 	loop.add_signal_handler(signal.SIGINT, signal_handler)
 
 	# Do the things
-	
+	print ('Checking base url: ',valid_url)
 	f = asyncio.wait([get_status(valid_url + directory.rstrip('\n'), verbose, outfile, sem) for directory in directories])
 	try:
 		url = url_checker(url)
