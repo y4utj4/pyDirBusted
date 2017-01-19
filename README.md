@@ -13,3 +13,5 @@ Syntax is as follows:
 ## Acknowledgements
 Thanks to [coldfusion39](https://github.com/coldfusion39) and [zeroSteiner](https://github.com/zerosteiner) for some help and advice with this project. I pulled the wordlists from [here](http://blog.thireus.com/web-common-directories-and-filenames-word-lists-collection/) so they're not all mine. 
 
+## License
+pyDirBusted is released under the GNU General Public License. Check it out [here](https://github.com/y4utj4/pyDirBusted/blob/master/LICENSE).
