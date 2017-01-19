@@ -129,5 +129,7 @@ def main():
 	except asyncio.CancelledError:
 		print('Tasks were canceled')
 
+	print('[+] pyDirBuster completed successfully. Happy Hunting.')
+
 if __name__ == '__main__':
 	main()
