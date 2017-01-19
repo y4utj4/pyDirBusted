@@ -25,34 +25,34 @@ def get_status(site, verbose, outfile, sem):
 	with (yield from sem):
 		response = yield from aiohttp.request('GET', site, compress=True)
 
+	# Prints / outputs status
 	if response.status == 200: # Site Reached
 		if verbose:
-			print("[+] FOUND: {0}: {1}".format(site, response.status))
+			print("[+] FOUND: {0} - Code:{1}".format(site, response.status))
 		if outfile:
-			outfile.write("{0}: {1}".format(site, response.status) + '\n')
+			outfile.write("{0}: {1}".format(response.status, site) + '\n')
 	elif 300 < response.status < 308: # Web Redirects
 		if verbose:
-			print("[!] Web Redirect: {0}: {1}".format(site, response.status))	
+			print("[!] Web Redirect: {0} - Code:{1}".format(site, response.status))	
 		if outfile:
-			outfile.write("{0}: {1}".format(site, response.status) + '\n')
+			outfile.write("{0}: {1}".format(response.status, site) + '\n')
 	elif response.status == 401: # Authorization Required
 		if verbose:
-			print("[!] Authorization Required: {0}: {1}".format(site, response.status))
+			print("[!] Authorization Required: {0} - Code:{1}".format(site, response.status))
 		if outfile:
-			outfile.write("{0}: {1}".format(site, response.status) + '\n')
+			outfile.write("{0}: {1}".format(response.status, site) + '\n')
 	elif response.status == 403: # Forbidden
 		if verbose:
-			print("[!] Forbidden: {0}: {1}".format(site, response.status))
+			print("[!] Forbidden: {0} - Code:{1}".format(site, response.status))
 	elif response.status == 404: # Website not found
 		if verbose:
-			print("[-] Not Found: {0}: {1}".format(site, response.status))
+			print("[-] Not Found: {0} - Code:{1}".format(site, response.status))
 	elif response.status == 503: # Service Unavailable
 		if verbose:
-			print("[-] Service Unavailable: {0}: {1}".format(site, response.status))
+			print("[-] Service Unavailable: {0} - Code:{1}".format(site, response.status))
 	else:
 		if verbose: #catch all. Look up the status number
-			print("[?] Unknown Response: {0}: {1}".format(site, response.status))
-	
+			print("[?] Unknown Response: {0} - Code:{1}".format(site, response.status))
 	yield from response.release()
 
 def signal_handler():
